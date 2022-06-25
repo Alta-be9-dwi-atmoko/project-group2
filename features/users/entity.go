@@ -15,4 +15,5 @@ type Business interface {
 }
 
 type Data interface {
+	SelectData(param string) (data []Core, err error)
 }
