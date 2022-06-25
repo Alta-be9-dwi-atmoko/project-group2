@@ -5,6 +5,7 @@ import (
 	"project/group2/features/users"
 	"strconv"
 
+	_requestUser "project/group2/features/users/presentation/request"
 	_responseUser "project/group2/features/users/presentation/response"
 	_helper "project/group2/helper"
 
@@ -31,4 +32,23 @@ func (h *UserHandler) GetAll(c echo.Context) error {
 		return c.JSON(http.StatusInternalServerError, _helper.ResponseFailed("failed to get all data users"))
 	}
 	return c.JSON(http.StatusOK, _helper.ResponseOkWithData("success", _responseUser.FromCoreList(result)))
+}
+
+func (h *UserHandler) PostUser(c echo.Context) error {
+	userReq := _requestUser.User{}
+	err := c.Bind(&userReq)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, _helper.ResponseFailed("failed to bind data, check your input"))
+	}
+
+	dataUser := _requestUser.ToCore(userReq)
+	row, errCreate := h.userBusiness.CreateData(dataUser)
+	if row == -1 {
+		return c.JSON(http.StatusBadRequest, _helper.ResponseFailed("please make sure all fields are filled in correctly"))
+	}
+	if errCreate != nil {
+		return c.JSON(http.StatusInternalServerError, _helper.ResponseFailed("failed to create data users"))
+	}
+
+	return c.JSON(http.StatusOK, _helper.ResponseOkNoData("success"))
 }
