@@ -12,6 +12,7 @@ type Core struct {
 }
 
 type Business interface {
+	GetAllData(limit, offset int) (data []Core, err error)
 }
 
 type Data interface {
