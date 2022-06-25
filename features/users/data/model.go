@@ -17,7 +17,7 @@ type User struct {
 
 func (data *User) toCore() users.Core {
 	return users.Core{
-		ID:        int64(data.ID),
+		ID:        int(data.ID),
 		Name:      data.Name,
 		Email:     data.Email,
 		Password:  data.Password,
