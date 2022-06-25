@@ -8,7 +8,7 @@ import (
 	_responseUser "project/group2/features/users/presentation/response"
 	_helper "project/group2/helper"
 
-	"github.com/labstack/echo"
+	"github.com/labstack/echo/v4"
 )
 
 type UserHandler struct {
