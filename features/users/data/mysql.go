@@ -30,8 +30,6 @@ func (repo *mysqlUserRepository) SelectData(data string) (response []users.Core,
 
 func (repo *mysqlUserRepository) InsertData(input users.Core) (row int, err error) {
 	user := FromCore(input)
-	fmt.Println("user data:", user)
-	fmt.Println("user data email:", user.Email)
 	//email duplicates check
 	// resultemail := repo.DB.Model(&User{}).Where("email = ?", user.Email)
 	// if resultemail.Error != nil {
@@ -41,7 +39,6 @@ func (repo *mysqlUserRepository) InsertData(input users.Core) (row int, err erro
 	if errorHash != nil {
 		fmt.Println("Error hash", errorHash.Error())
 	}
-	fmt.Println("user: ", user)
 	user.Password = string(passwordHashed)
 	resultcreate := repo.DB.Create(&user)
 	if resultcreate.Error == nil {
