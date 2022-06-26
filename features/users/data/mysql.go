@@ -74,3 +74,12 @@ func (repo *mysqlUserRepository) LoginUserDB(authData users.AuthRequestData) (to
 
 	return token, userData.Name, nil
 }
+
+func (repo *mysqlUserRepository) SelectDataById(idUser int) (data users.Core, err error) {
+	dataUser := User{}
+	result := repo.DB.Find(&dataUser, idUser)
+	if result.Error != nil {
+		return users.Core{}, result.Error
+	}
+	return dataUser.toCore(), nil
+}

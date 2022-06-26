@@ -67,3 +67,14 @@ func (h *UserHandler) LoginAuth(c echo.Context) error {
 	}
 	return c.JSON(http.StatusOK, _helper.ResponseOkWithData("login success", data))
 }
+
+func (h *UserHandler) GetById(c echo.Context) error {
+	id := c.Param("id")
+	idUser, _ := strconv.Atoi(id)
+	result, errGet := h.userBusiness.GetUserById(idUser)
+	if errGet != nil {
+		return c.JSON(http.StatusInternalServerError, _helper.ResponseFailed("failed to get data user"))
+	}
+
+	return c.JSON(http.StatusOK, _helper.ResponseOkWithData("success", _responseUser.FromCore(result)))
+}

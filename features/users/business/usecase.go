@@ -33,3 +33,8 @@ func (uc *userUseCase) LoginUser(authData users.AuthRequestData) (token, name st
 	token, name, err = uc.userData.LoginUserDB(authData)
 	return token, name, err
 }
+
+func (uc *userUseCase) GetUserById(idUser int) (data users.Core, err error) {
+	data, err = uc.userData.SelectDataById(idUser)
+	return data, err
+}
