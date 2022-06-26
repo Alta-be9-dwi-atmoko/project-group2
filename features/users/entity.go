@@ -17,6 +17,7 @@ type Business interface {
 	LoginUser(authData AuthRequestData) (token, name string, err error)
 	GetUserById(id int) (data Core, err error)
 	UpdateData(data Core, idUser int) (row int, err error)
+	DeleteDataById(idUser int) (row int, err error)
 }
 
 type Data interface {
@@ -25,4 +26,5 @@ type Data interface {
 	LoginUserDB(authData AuthRequestData) (token, name string, err error)
 	SelectDataById(id int) (data Core, err error)
 	UpdateDataDB(data map[string]interface{}, idUser int) (row int, err error)
+	DeleteDataByIdDB(idUser int) (row int, err error)
 }

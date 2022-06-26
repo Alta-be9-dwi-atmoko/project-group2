@@ -97,3 +97,17 @@ func (h *UserHandler) PutUser(c echo.Context) error {
 	}
 	return c.JSON(http.StatusOK, _helper.ResponseOkNoData("success"))
 }
+
+func (h *UserHandler) DeleteById(c echo.Context) error {
+	id := c.Param("id")
+	idUser, _ := strconv.Atoi(id)
+	row, errDel := h.userBusiness.DeleteDataById(idUser)
+	if errDel != nil {
+		return c.JSON(http.StatusInternalServerError, _helper.ResponseFailed("failed to delete data user"))
+	}
+	if row != 1 {
+		return c.JSON(http.StatusBadRequest, _helper.ResponseFailed("failed to delete data user"))
+	}
+
+	return c.JSON(http.StatusOK, _helper.ResponseOkNoData("success"))
+}

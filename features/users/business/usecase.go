@@ -53,3 +53,8 @@ func (uc *userUseCase) UpdateData(input users.Core, idUser int) (row int, err er
 	row, err = uc.userData.UpdateDataDB(userReq, idUser)
 	return row, err
 }
+
+func (uc *userUseCase) DeleteDataById(idUser int) (row int, err error) {
+	row, err = uc.userData.DeleteDataByIdDB(idUser)
+	return row, err
+}
