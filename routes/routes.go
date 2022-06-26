@@ -12,5 +12,6 @@ func New(presenter factory.Presenter) *echo.Echo {
 
 	e.GET("/users", presenter.UserPresenter.GetAll)
 	e.POST("/users", presenter.UserPresenter.PostUser)
+	e.POST("/login", presenter.UserPresenter.LoginAuth)
 	return e
 }

@@ -28,3 +28,8 @@ func (uc *userUseCase) CreateData(input users.Core) (row int, err error) {
 	row, err = uc.userData.InsertData(input)
 	return row, err
 }
+
+func (uc *userUseCase) LoginUser(authData users.AuthRequestData) (token, name string, err error) {
+	token, name, err = uc.userData.LoginUserDB(authData)
+	return token, name, err
+}
