@@ -52,3 +52,18 @@ func (h *UserHandler) PostUser(c echo.Context) error {
 
 	return c.JSON(http.StatusOK, _helper.ResponseOkNoData("success"))
 }
+
+func (h *UserHandler) LoginAuth(c echo.Context) error {
+	authData := users.AuthRequestData{}
+	c.Bind(&authData)
+	token, name, e := h.userBusiness.LoginUser(authData)
+	if e != nil {
+		return c.JSON(http.StatusBadRequest, _helper.ResponseFailed("email or password incorrect"))
+	}
+
+	data := map[string]interface{}{
+		"token": token,
+		"name":  name,
+	}
+	return c.JSON(http.StatusOK, _helper.ResponseOkWithData("login success", data))
+}
