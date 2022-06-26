@@ -22,4 +22,4 @@ jobs:
             docker stop group2Container
             docker rm group2Container
             docker build -t group2-api:latest .
-            docker run -d -p 80:80 --name group2Container
+            docker run -d -p 80:80 --name group2Container group2-api:latest
