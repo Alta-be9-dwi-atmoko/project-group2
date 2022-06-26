@@ -19,5 +19,5 @@ func main() {
 
 	e := routes.New(presenter)
 
-	e.Logger.Fatal(e.Start(":80"))
+	e.Start(":80")
 }
