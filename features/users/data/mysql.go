@@ -83,3 +83,16 @@ func (repo *mysqlUserRepository) SelectDataById(idUser int) (data users.Core, er
 	}
 	return dataUser.toCore(), nil
 }
+
+func (repo *mysqlUserRepository) UpdateDataDB(data map[string]interface{}, idUser int) (row int, err error) {
+	result := repo.DB.Model(&User{}).Where("id = ?", idUser).Updates(data)
+	if result.Error != nil {
+		return 0, result.Error
+	}
+
+	if result.RowsAffected != 1 {
+		return 0, errors.New("failed to update data")
+	}
+
+	return int(result.RowsAffected), nil
+}

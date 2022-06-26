@@ -47,7 +47,7 @@ func (h *UserHandler) PostUser(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, _helper.ResponseFailed("please make sure all fields are filled in correctly"))
 	}
 	if errCreate != nil {
-		return c.JSON(http.StatusInternalServerError, _helper.ResponseFailed("failed to create data users"))
+		return c.JSON(http.StatusInternalServerError, _helper.ResponseFailed("your email is already registered"))
 	}
 
 	return c.JSON(http.StatusOK, _helper.ResponseOkNoData("success"))
@@ -77,4 +77,23 @@ func (h *UserHandler) GetById(c echo.Context) error {
 	}
 
 	return c.JSON(http.StatusOK, _helper.ResponseOkWithData("success", _responseUser.FromCore(result)))
+}
+
+func (h *UserHandler) PutUser(c echo.Context) error {
+	id := c.Param("id")
+	idUser, _ := strconv.Atoi(id)
+	userReq := _requestUser.User{}
+	err := c.Bind(&userReq)
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, _helper.ResponseFailed("failed to bind data, check your input"))
+	}
+	dataUser := _requestUser.ToCore(userReq)
+	row, errUpd := h.userBusiness.UpdateData(dataUser, idUser)
+	if errUpd != nil {
+		return c.JSON(http.StatusInternalServerError, _helper.ResponseFailed("failed to update data users"))
+	}
+	if row == 0 {
+		return c.JSON(http.StatusBadRequest, _helper.ResponseFailed("failed to update data users"))
+	}
+	return c.JSON(http.StatusOK, _helper.ResponseOkNoData("success"))
 }
