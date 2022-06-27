@@ -20,7 +20,7 @@ func NewProductRepository(db *gorm.DB) products.Data {
 
 func (repo *mysqlProductRepository) SelectData(limit, offset int) (response []products.Core, err error) {
 	dataProduct := []Product{}
-	result := repo.DB.Limit(limit).Offset(offset).Find(&dataProduct)
+	result := repo.DB.Preload("User").Limit(limit).Offset(offset).Find(&dataProduct)
 	if result.Error != nil {
 		return []products.Core{}, result.Error
 	}
