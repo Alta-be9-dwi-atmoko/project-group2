@@ -33,7 +33,7 @@ func (uc *productUseCase) GetProductById(idProd int) (data products.Core, err er
 	return data, err
 }
 
-func (uc *productUseCase) UpdateData(input products.Core, idProd int) (row int, err error) {
+func (uc *productUseCase) UpdateData(input products.Core, idProd, idFromToken int) (row int, err error) {
 	prodReq := map[string]interface{}{}
 	if input.Name != "" {
 		prodReq["name"] = input.Name
@@ -50,6 +50,16 @@ func (uc *productUseCase) UpdateData(input products.Core, idProd int) (row int, 
 	if input.Description != "" {
 		prodReq["description"] = input.Description
 	}
-	row, err = uc.productData.UpdateDataDB(prodReq, idProd)
+	row, err = uc.productData.UpdateDataDB(prodReq, idProd, idFromToken)
+	return row, err
+}
+
+func (uc *productUseCase) GetDataByMe(idUser int) (data []products.Core, err error) {
+	data, err = uc.productData.GetDataByMeDB(idUser)
+	return data, err
+}
+
+func (uc *productUseCase) DeleteDataById(idProd, idFromToken int) (row int, err error) {
+	row, err = uc.productData.DeleteDataByIdDB(idProd, idFromToken)
 	return row, err
 }
