@@ -8,15 +8,11 @@ servers:
 
 tags:
   - name: Autentication
-    description: Login management
   - name: Users
-    description: User data management
   - name: Product
-    description: Product data management
   - name: Cart
-    description: Cart data management
   - name: Order
-    description: Order data management
+
 paths:
   /login:
     post:
