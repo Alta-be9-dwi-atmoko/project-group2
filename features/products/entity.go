@@ -1,5 +1,7 @@
 package products
 
+import "time"
+
 type Core struct {
 	ID          int
 	Name        string
@@ -7,6 +9,8 @@ type Core struct {
 	Qty         int
 	Image       string
 	Description string
+	CreatedAt   time.Time
+	UpdatedAt   time.Time
 	User        User
 }
 
