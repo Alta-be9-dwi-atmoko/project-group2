@@ -20,7 +20,7 @@ type Product struct {
 type User struct {
 	gorm.Model
 	Name     string
-	Email    string
+	Email    string `gorm:"unique"`
 	Password string
 	Product  []Product `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
 }
@@ -38,7 +38,7 @@ func (data *Product) toCore() products.Core {
 		CreatedAt:   data.CreatedAt,
 		UpdatedAt:   data.UpdatedAt,
 		User: products.User{
-			ID:   int(data.User.ID),
+			ID:   int(data.UserID),
 			Name: data.User.Name,
 		},
 	}

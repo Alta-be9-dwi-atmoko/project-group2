@@ -1,6 +1,7 @@
 package presentation
 
 import (
+	"fmt"
 	"net/http"
 	_middleware "project/group2/features/middlewares"
 	"project/group2/features/products"
@@ -73,19 +74,42 @@ func (h *ProductHandler) PutProduct(c echo.Context) error {
 	idFromToken, _ := _middleware.ExtractToken(c)
 	prodReq := _requestProduct.Product{}
 	err := c.Bind(&prodReq)
-	if prodReq.UserID != idFromToken {
-		return c.JSON(http.StatusBadRequest, _helper.ResponseFailed("you dont have access"))
-	}
+
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, _helper.ResponseFailed("failed to bind data, check your input"))
 	}
 	dataProduct := _requestProduct.ToCore(prodReq)
-	row, errUpd := h.productBusiness.UpdateData(dataProduct, idProd)
+	row, errUpd := h.productBusiness.UpdateData(dataProduct, idProd, idFromToken)
 	if errUpd != nil {
-		return c.JSON(http.StatusInternalServerError, _helper.ResponseFailed("failed to update data product"))
+		return c.JSON(http.StatusInternalServerError, _helper.ResponseFailed("you dont have access"))
 	}
 	if row == 0 {
-		return c.JSON(http.StatusBadRequest, _helper.ResponseFailed("failed to update data product"))
+		return c.JSON(http.StatusBadRequest, _helper.ResponseFailed("failed to update data"))
 	}
+	return c.JSON(http.StatusOK, _helper.ResponseOkNoData("success"))
+}
+
+func (h *ProductHandler) GetByMe(c echo.Context) error {
+	idFromToken, _ := _middleware.ExtractToken(c)
+	fmt.Println("idFromToken: ", idFromToken)
+	result, err := h.productBusiness.GetDataByMe(idFromToken)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, _helper.ResponseFailed("failed to get your product data"))
+	}
+	return c.JSON(http.StatusOK, _helper.ResponseOkWithData("success", _responseProduct.FromCoreList(result)))
+}
+
+func (h *ProductHandler) DeleteById(c echo.Context) error {
+	id := c.Param("id")
+	idProd, _ := strconv.Atoi(id)
+	idFromToken, _ := _middleware.ExtractToken(c)
+	row, errDel := h.productBusiness.DeleteDataById(idProd, idFromToken)
+	if errDel != nil {
+		return c.JSON(http.StatusInternalServerError, _helper.ResponseFailed("you dont have access"))
+	}
+	if row != 1 {
+		return c.JSON(http.StatusBadRequest, _helper.ResponseFailed("failed to delete data user"))
+	}
+
 	return c.JSON(http.StatusOK, _helper.ResponseOkNoData("success"))
 }
