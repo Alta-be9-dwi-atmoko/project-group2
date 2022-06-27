@@ -33,3 +33,11 @@ func FromCore(data products.Core) Product {
 		},
 	}
 }
+
+func FromCoreList(data []products.Core) []Product {
+	result := []Product{}
+	for key := range data {
+		result = append(result, FromCore(data[key]))
+	}
+	return result
+}
