@@ -32,3 +32,24 @@ func (uc *productUseCase) GetProductById(idProd int) (data products.Core, err er
 	data, err = uc.productData.SelectDataById(idProd)
 	return data, err
 }
+
+func (uc *productUseCase) UpdateData(input products.Core, idProd int) (row int, err error) {
+	prodReq := map[string]interface{}{}
+	if input.Name != "" {
+		prodReq["name"] = input.Name
+	}
+	if input.Price != 0 {
+		prodReq["price"] = input.Price
+	}
+	if input.Qty != 0 {
+		prodReq["qty"] = input.Qty
+	}
+	if input.Image != "" {
+		prodReq["image"] = input.Image
+	}
+	if input.Description != "" {
+		prodReq["description"] = input.Description
+	}
+	row, err = uc.productData.UpdateDataDB(prodReq, idProd)
+	return row, err
+}

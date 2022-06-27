@@ -46,3 +46,16 @@ func (repo *mysqlProductRepository) SelectDataById(idProd int) (data products.Co
 	}
 	return dataProduct.toCore(), nil
 }
+
+func (repo *mysqlProductRepository) UpdateDataDB(data map[string]interface{}, idProd int) (row int, err error) {
+	result := repo.DB.Model(&Product{}).Where("id = ?", idProd).Updates(data)
+	if result.Error != nil {
+		return 0, result.Error
+	}
+
+	if result.RowsAffected != 1 {
+		return 0, errors.New("failed to update data")
+	}
+
+	return int(result.RowsAffected), nil
+}

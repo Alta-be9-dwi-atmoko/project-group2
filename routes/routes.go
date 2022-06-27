@@ -28,5 +28,7 @@ func New(presenter factory.Presenter) *echo.Echo {
 	e.GET("/products", presenter.ProductPresenter.GetAll)
 	e.POST("/products", presenter.ProductPresenter.PostProduct, _middleware.JWTMiddleware())
 	e.GET("/products/:id", presenter.ProductPresenter.GetById)
+	e.PUT("/products/:id", presenter.ProductPresenter.PutProduct, _middleware.JWTMiddleware())
+	e.GET("/products/me", presenter.ProductPresenter.GetDataByMe)
 	return e
 }
