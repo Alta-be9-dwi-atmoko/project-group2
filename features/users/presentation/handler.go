@@ -5,6 +5,7 @@ import (
 	"project/group2/features/users"
 	"strconv"
 
+	_middleware "project/group2/features/middlewares"
 	_requestUser "project/group2/features/users/presentation/request"
 	_responseUser "project/group2/features/users/presentation/response"
 	_helper "project/group2/helper"
@@ -82,6 +83,10 @@ func (h *UserHandler) GetById(c echo.Context) error {
 func (h *UserHandler) PutUser(c echo.Context) error {
 	id := c.Param("id")
 	idUser, _ := strconv.Atoi(id)
+	idFromToken, _ := _middleware.ExtractToken(c)
+	if idUser != idFromToken {
+		return c.JSON(http.StatusBadRequest, _helper.ResponseFailed("you dont have access"))
+	}
 	userReq := _requestUser.User{}
 	err := c.Bind(&userReq)
 	if err != nil {
@@ -101,6 +106,10 @@ func (h *UserHandler) PutUser(c echo.Context) error {
 func (h *UserHandler) DeleteById(c echo.Context) error {
 	id := c.Param("id")
 	idUser, _ := strconv.Atoi(id)
+	idFromToken, _ := _middleware.ExtractToken(c)
+	if idFromToken != idUser {
+		return c.JSON(http.StatusBadRequest, _helper.ResponseFailed("you dont have access"))
+	}
 	row, errDel := h.userBusiness.DeleteDataById(idUser)
 	if errDel != nil {
 		return c.JSON(http.StatusInternalServerError, _helper.ResponseFailed("failed to delete data user"))
