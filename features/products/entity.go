@@ -22,9 +22,11 @@ type User struct {
 type Business interface {
 	GetAllData(limit, offset int) (data []Core, err error)
 	CreateData(data Core) (row int, err error)
+	GetProductById(idProd int) (product Core, err error)
 }
 
 type Data interface {
 	SelectData(limit, offset int) (data []Core, err error)
 	InsertData(data Core) (row int, err error)
+	SelectDataById(idProd int) (product Core, err error)
 }

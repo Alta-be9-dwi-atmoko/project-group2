@@ -27,3 +27,8 @@ func (uc *productUseCase) CreateData(input products.Core) (row int, err error) {
 	row, err = uc.productData.InsertData(input)
 	return row, err
 }
+
+func (uc *productUseCase) GetProductById(idProd int) (data products.Core, err error) {
+	data, err = uc.productData.SelectDataById(idProd)
+	return data, err
+}
