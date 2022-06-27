@@ -42,7 +42,7 @@ func (repo *mysqlUserRepository) InsertData(input users.Core) (row int, err erro
 	}
 	user.Password = string(passwordHashed)
 	resultcreate := repo.DB.Create(&user)
-	if resultcreate.Error == nil {
+	if resultcreate.Error != nil {
 		return 0, resultcreate.Error
 	}
 	if resultcreate.RowsAffected != 1 {

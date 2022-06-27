@@ -19,6 +19,12 @@ type User struct {
 	Name string
 }
 
-type Business interface{}
+type Business interface {
+	GetAllData(limit, offset int) (data []Core, err error)
+	CreateData(data Core) (row int, err error)
+}
 
-type Data interface{}
+type Data interface {
+	SelectData(limit, offset int) (data []Core, err error)
+	InsertData(data Core) (row int, err error)
+}

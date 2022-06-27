@@ -52,7 +52,7 @@ func toCoreList(data []Product) []products.Core {
 	return result
 }
 
-func fromCore(core products.Core) Product {
+func FromCore(core products.Core) Product {
 	return Product{
 		Name:        core.Name,
 		Price:       core.Price,
