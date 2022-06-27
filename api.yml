@@ -4,19 +4,15 @@ info:
   description: Open API scarpa
   version: "1.0"
 servers:
-  - url: ini server
+  - url: 3.83.173.201
 
 tags:
   - name: Autentication
-    description: Login management
   - name: Users
-    description: User data management
   - name: Product
-    description: Product data management
   - name: Cart
-    description: Cart data management
   - name: Order
-    description: Order data management
+
 paths:
   /login:
     post:
@@ -143,6 +139,10 @@ paths:
             example: 1
           required: true
       responses:
+        "403":
+          description: forbiden
+        "404":
+          description: No data
         "200":
           description: Success Response
           content:
@@ -152,12 +152,7 @@ paths:
               examples:
                 response data:
                   description: response success 1
-                  value:
-                    {
-                      code: 200,
-                      status: "success",
-                      message: "success operation create data",
-                    }
+                  value: { id: 1, name: "sutiaji", email: "sutiaji@gmail.com" }
         "400":
           description: Failed Response
           content:
@@ -170,7 +165,7 @@ paths:
                   value:
                     {
                       code: 400,
-                      status: "failed",
+                      status: "login failed",
                       message: "Login Failed. Email or Password incorrect.",
                     }
                 responseData2:
@@ -181,6 +176,83 @@ paths:
                       status: "failed",
                       message: "Login Failed. Your email doesn't match any entry",
                     }
+    put:
+      tags:
+        - Users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#"
+            example:
+              name: sutiaji
+              email: altera@gmail.com
+              password: qwerty123
+      parameters:
+        - name: iduser
+          in: query
+          schema:
+            type: integer
+            example: 1
+          required: true
+      responses:
+        "200":
+          description: Success Response
+          content:
+            application/json:
+              schema:
+                $ref: "#"
+              examples:
+                response data:
+                  value:
+                    code: 200
+                    status: "success"
+                    message: "Successful Operation"
+
+        "400":
+          description: Failed Response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/failedResponse"
+              examples:
+                responseData1:
+                  description: response failed 1
+                  value: { code: 400, status: "failed", message: "Bad Request" }
+    delete:
+      tags:
+        - Users
+      parameters:
+        - name: iduser
+          in: query
+          schema:
+            type: integer
+            example: 1
+          required: true
+      responses:
+        "200":
+          description: Success Response
+          content:
+            application/json:
+              schema:
+                $ref: "#"
+              examples:
+                response data:
+                  value:
+                    code: 200
+                    status: "success"
+                    message: "Successful Operation"
+
+        "400":
+          description: Failed Response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/failedResponse"
+              examples:
+                responseData1:
+                  description: response failed 1
+                  value: { code: 400, status: "failed", message: "Bad Request" }
 
   /products:
     post:
