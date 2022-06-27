@@ -37,3 +37,12 @@ func (repo *mysqlProductRepository) InsertData(input products.Core) (row int, er
 	}
 	return int(resultcreate.RowsAffected), nil
 }
+
+func (repo *mysqlProductRepository) SelectDataById(idProd int) (data products.Core, err error) {
+	dataProduct := Product{}
+	result := repo.DB.Find(&dataProduct, idProd)
+	if result.Error != nil {
+		return products.Core{}, result.Error
+	}
+	return dataProduct.toCore(), nil
+}

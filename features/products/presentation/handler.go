@@ -56,3 +56,13 @@ func (h *ProductHandler) PostProduct(c echo.Context) error {
 
 	return c.JSON(http.StatusOK, _helper.ResponseOkNoData("success"))
 }
+
+func (h *ProductHandler) GetById(c echo.Context) error {
+	id := c.Param("id")
+	idUser, _ := strconv.Atoi(id)
+	result, errGet := h.productBusiness.GetProductById(idUser)
+	if errGet != nil {
+		return c.JSON(http.StatusInternalServerError, _helper.ResponseFailed("failed to get data product"))
+	}
+	return c.JSON(http.StatusOK, _helper.ResponseOkWithData("success", _responseProduct.FromCore(result)))
+}
