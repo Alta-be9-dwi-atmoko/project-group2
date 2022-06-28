@@ -1,10 +1,10 @@
 openapi: "3.0.2"
 info:
-  title: E-Comerce SCARPA
+  title: E-Comerces SCARPA
   description: Open API scarpa
   version: "1.0"
 servers:
-  - url: 3.83.173.201
+  - url: 3.83.173.201:80
 
 tags:
   - name: Autentication
@@ -44,7 +44,6 @@ paths:
                       message: "Login Success",
                       data:
                         {
-                          id: 1,
                           nama: "Sutiaji",
                           token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdXRob3JpemVkIjp0cnVlLCJleHAiOjE2MzgzMjYxODAsInVzZXJJZCI6MSwidXNlcm5hbWUiOiJhZG1pbiJ9.AebFR-oQjUSOMez2ucDWkiMrS2eQIPmcYm5c71qZ_co",
                         },
@@ -62,15 +61,7 @@ paths:
                     {
                       code: 400,
                       status: "failed",
-                      message: "Login Failed. Email or Password incorrect.",
-                    }
-                responseData2:
-                  description: response failed 2
-                  value:
-                    {
-                      code: 400,
-                      status: "failed",
-                      message: "Login Failed. Your email doesn't match any entry",
+                      message: "email or password incorrect",
                     }
 
   /users:
@@ -116,15 +107,7 @@ paths:
                     {
                       code: 400,
                       status: "failed",
-                      message: "Login Failed. Email or Password incorrect.",
-                    }
-                responseData2:
-                  description: response failed 2
-                  value:
-                    {
-                      code: 400,
-                      status: "failed",
-                      message: "Login Failed. Your email doesn't match any entry",
+                      message: "please make sure all fields are filled in correctly",
                     }
   /users/{id}:
     get:
@@ -152,7 +135,13 @@ paths:
               examples:
                 response data:
                   description: response success 1
-                  value: { id: 1, name: "sutiaji", email: "sutiaji@gmail.com" }
+                  value:
+                    {
+                      id: 1,
+                      name: "sutiaji",
+                      email: "sutiaji@gmail.com",
+                      created_at: 0001-01-01T00:00:00Z,
+                    }
         "400":
           description: Failed Response
           content:
@@ -162,20 +151,7 @@ paths:
               examples:
                 responseData1:
                   description: response failed 1
-                  value:
-                    {
-                      code: 400,
-                      status: "login failed",
-                      message: "Login Failed. Email or Password incorrect.",
-                    }
-                responseData2:
-                  description: response failed 2
-                  value:
-                    {
-                      code: 400,
-                      status: "failed",
-                      message: "Login Failed. Your email doesn't match any entry",
-                    }
+                  value: { code: 400, status: "failed", message: "bad request" }
     put:
       tags:
         - Users
