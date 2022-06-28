@@ -8,12 +8,12 @@ import (
 
 type Cart struct {
 	gorm.Model
-	Qty        int
-	TotalPrice int
-	Status     string
-	UserID     int
-	User       User    `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
-	Product    Product `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
+	Qty       int
+	Status    string
+	UserID    int
+	ProductID int
+	User      User    `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
+	Product   Product `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
 }
 
 type User struct {
@@ -21,7 +21,7 @@ type User struct {
 	Name     string
 	Email    string `gorm:"unique"`
 	Password string
-	Cart     []Cart `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
+	Product  []Product
 }
 
 type Product struct {
@@ -32,20 +32,20 @@ type Product struct {
 	Image       string
 	Description string
 	UserID      uint
-	User        User `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
+	Cart        []Cart `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
+	User        User
 }
 
 // DTO
 
 func (data *Cart) toCore() _cart.Core {
 	return _cart.Core{
-		ID:         int(data.ID),
-		Qty:        data.Qty,
-		TotalPrice: data.TotalPrice,
-		Status:     data.Status,
-		UserID:     data.UserID,
-		CreatedAt:  data.CreatedAt,
-		UpdatedAt:  data.UpdatedAt,
+		ID:        int(data.ID),
+		Qty:       data.Qty,
+		Status:    data.Status,
+		UserID:    data.UserID,
+		CreatedAt: data.CreatedAt,
+		UpdatedAt: data.UpdatedAt,
 		Product: _cart.Product{
 			ID:          int(data.Product.ID),
 			Name:        data.Product.Name,
@@ -66,9 +66,9 @@ func toCoreList(data []Cart) []_cart.Core {
 
 func FromCore(core _cart.Core) Cart {
 	return Cart{
-		Qty:        core.Qty,
-		TotalPrice: core.TotalPrice,
-		Status:     core.Status,
-		UserID:     core.UserID,
+		Qty:       core.Qty,
+		Status:    core.Status,
+		UserID:    core.UserID,
+		ProductID: core.Product.ID,
 	}
 }

@@ -31,5 +31,9 @@ func New(presenter factory.Presenter) *echo.Echo {
 	e.PUT("/products/:id", presenter.ProductPresenter.PutProduct, _middleware.JWTMiddleware())
 	e.GET("/products/me", presenter.ProductPresenter.GetByMe, _middleware.JWTMiddleware())
 	e.DELETE("/products/:id", presenter.ProductPresenter.DeleteById, _middleware.JWTMiddleware())
+
+	e.POST("/cart", presenter.CartPresenter.PostCart, _middleware.JWTMiddleware())
+
 	return e
+
 }

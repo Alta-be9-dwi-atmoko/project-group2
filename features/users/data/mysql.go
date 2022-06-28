@@ -31,11 +31,6 @@ func (repo *mysqlUserRepository) SelectData(data string) (response []users.Core,
 
 func (repo *mysqlUserRepository) InsertData(input users.Core) (row int, err error) {
 	user := FromCore(input)
-	//email duplicates check
-	// resultemail := repo.DB.Model(&User{}).Where("email = ?", user.Email)
-	// if resultemail.Error != nil {
-	// 	return 0, errors.New("email is already registered")
-	// }
 	passwordHashed, errorHash := _bcrypt.GenerateFromPassword([]byte(user.Password), 10)
 	if errorHash != nil {
 		fmt.Println("Error hash", errorHash.Error())

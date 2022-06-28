@@ -3,14 +3,15 @@ package cart
 import "time"
 
 type Core struct {
-	ID         int
-	Qty        int
-	TotalPrice int
-	Status     string
-	UserID     int
-	CreatedAt  time.Time
-	UpdatedAt  time.Time
-	Product    Product
+	ID        int
+	Qty       int
+	Status    string
+	UserID    int
+	ProdID    int
+	CreatedAt time.Time
+	UpdatedAt time.Time
+	Product   Product
+	User      User
 }
 
 type Product struct {
@@ -19,8 +20,22 @@ type Product struct {
 	Price       int
 	Qty         int
 	Description string
+	UserID      int
+	User        User
 }
 
-type Business struct{}
+type User struct {
+	ID    int
+	Name  string
+	Email string
+}
 
-type Data struct{}
+type Business interface {
+	GetAllData(limit, offset, idFromToken int) (data []Core, err error)
+	CreateData(data Core) (row int, err error)
+}
+
+type Data interface {
+	SelectData(limit, offset, idFromToken int) (data []Core, err error)
+	InsertData(data Core) (row int, err error)
+}
