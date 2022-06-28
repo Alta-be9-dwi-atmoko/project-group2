@@ -9,12 +9,17 @@ import (
 	_productData "project/group2/features/products/data"
 	_productPresentation "project/group2/features/products/presentation"
 
+	_cartBusiness "project/group2/features/carts/business"
+	_cartData "project/group2/features/carts/data"
+	_cartPresentation "project/group2/features/carts/presentation"
+
 	"gorm.io/gorm"
 )
 
 type Presenter struct {
 	UserPresenter    *_userPresentation.UserHandler
 	ProductPresenter *_productPresentation.ProductHandler
+	CartPresenter    *_cartPresentation.CartHandler
 }
 
 func InitFactory(dbConn *gorm.DB) Presenter {
@@ -27,8 +32,13 @@ func InitFactory(dbConn *gorm.DB) Presenter {
 	productBusiness := _productBusiness.NewProductBusiness(productData)
 	productPresentation := _productPresentation.NewProductHandler(productBusiness)
 
+	cartData := _cartData.NewCartRepository(dbConn)
+	cartBusiness := _cartBusiness.NewCartBusiness(cartData)
+	cartPresentation := _cartPresentation.NewCartHandler(cartBusiness)
+
 	return Presenter{
 		UserPresenter:    userPresentation,
 		ProductPresenter: productPresentation,
+		CartPresenter:    cartPresentation,
 	}
 }
