@@ -247,10 +247,10 @@ paths:
             schema:
               $ref: "#"
             example:
-              id: 5
               name: adidas1
               price: 500000
               qty: 1
+              image: "https://www.priceza.co.id/article/sepatu-adidas/"
               description: ini sepetu runing adidas1
 
       responses:
@@ -323,7 +323,7 @@ paths:
                   description: response failed 1
                   value: { code: 400, status: "failed", message: "Bad request" }
 
-  /prodicts/{id}:
+  /products/{id}:
     get:
       tags:
         - Product
@@ -353,11 +353,13 @@ paths:
                   description: response success 1
                   value:
                     {
-                      id: 5,
+                      id: 1,
                       name: adidas1,
                       price: 500000,
                       qty: 1,
+                      image: https://www.priceza.co.id/article/sepatu-adidas/,
                       description: ini sepetu runing adidas1,
+                      User: { id: 6, name: alta },
                     }
         "400":
           description: Failed Response
@@ -380,10 +382,10 @@ paths:
             schema:
               $ref: "#"
             example:
-              id: 5
               name: adidas1
               price: 500000
               qty: 1
+              image: https://www.priceza.co.id/article/sepatu-adidas/
               description: ini sepetu runing adidas1
       parameters:
         - name: iduser
@@ -415,7 +417,49 @@ paths:
               examples:
                 responseData1:
                   description: response failed 1
+                  value:
+                    {
+                      code: 400,
+                      status: "failed",
+                      message: "Bad Request, missing or malformed jwt",
+                    }
+    delete:
+      tags:
+        - Product
+      security:
+        - JWTAuth: []
+      parameters:
+        - name: iduser
+          in: query
+          schema:
+            type: integer
+            example: 1
+          required: true
+      responses:
+        "200":
+          description: Success Response
+          content:
+            application/json:
+              schema:
+                $ref: "#"
+              examples:
+                response data:
+                  value:
+                    code: 200
+                    status: "success"
+                    message: "Successful Operation"
+
+        "400":
+          description: Failed Response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/failedResponse"
+              examples:
+                responseData1:
+                  description: response failed 1
                   value: { code: 400, status: "failed", message: "Bad Request" }
+  #product
 
   /cart:
     post:
