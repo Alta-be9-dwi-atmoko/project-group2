@@ -59,16 +59,23 @@ func (h *CartHandler) PostCart(c echo.Context) error {
 	return c.JSON(http.StatusOK, _helper.ResponseOkNoData("success"))
 }
 
-// func (h *CartHandler) UpdateCart(c echo.Context) error {
-// 	id := c.Param("id")
-// 	idFromToken, _ := _middleware.ExtractToken(c)
-// 	cartReq := _requestCart.Cart{}
-// 	err := c.Bind(&cartReq)
+func (h *CartHandler) UpdateCart(c echo.Context) error {
+	id := c.Param("id")
+	idCart, _ := strconv.Atoi(id)
+	idFromToken, _ := _middleware.ExtractToken(c)
+	cartReq := _requestCart.Cart{}
+	err := c.Bind(&cartReq)
 
-// 	if err != nil {
-// 		return c.JSON(http.StatusBadRequest, _helper.ResponseFailed("failed to bind data, check your input"))
-// 	}
-// 	dataCart := _cart.Core{}
-// 	dataCart.Qty = cartReq.Qty
-// 	row, errUpd := h.cartBusiness.U
-// }
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, _helper.ResponseFailed("failed to bind data, check your input"))
+	}
+	qty := cartReq.Qty
+	row, errUpd := h.cartBusiness.UpdateData(qty, idCart, idFromToken)
+	if errUpd != nil {
+		return c.JSON(http.StatusInternalServerError, _helper.ResponseFailed("you dont have access"))
+	}
+	if row == 0 {
+		return c.JSON(http.StatusBadRequest, _helper.ResponseFailed("failed to update data"))
+	}
+	return c.JSON(http.StatusOK, _helper.ResponseOkNoData("success"))
+}

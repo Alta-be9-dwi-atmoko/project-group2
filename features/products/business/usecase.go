@@ -41,9 +41,7 @@ func (uc *productUseCase) UpdateData(input products.Core, idProd, idFromToken in
 	if input.Price != 0 {
 		prodReq["price"] = input.Price
 	}
-	if input.Qty != 0 {
-		prodReq["qty"] = input.Qty
-	}
+	prodReq["qty"] = input.Qty
 	if input.Image != "" {
 		prodReq["image"] = input.Image
 	}

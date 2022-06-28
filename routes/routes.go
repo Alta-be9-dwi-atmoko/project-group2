@@ -34,7 +34,7 @@ func New(presenter factory.Presenter) *echo.Echo {
 
 	e.POST("/cart", presenter.CartPresenter.PostCart, _middleware.JWTMiddleware())
 	e.GET("/cart", presenter.CartPresenter.GetAll, _middleware.JWTMiddleware())
-
+	e.PUT("/cart/:id", presenter.CartPresenter.UpdateCart, _middleware.JWTMiddleware())
 	return e
 
 }
