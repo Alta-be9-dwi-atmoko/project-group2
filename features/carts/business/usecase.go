@@ -2,6 +2,7 @@ package business
 
 import (
 	"errors"
+	"fmt"
 	_cart "project/group2/features/carts"
 )
 
@@ -17,6 +18,11 @@ func NewCartBusiness(datacart _cart.Data) _cart.Business {
 
 func (uc *cartUseCase) GetAllData(limit, offset, idFromToken int) (data []_cart.Core, err error) {
 	data, err = uc.cartData.SelectData(limit, offset, idFromToken)
+	fmt.Println("data:", data)
+	for k, v := range data {
+		data[k].TotalPrice = v.Qty * v.Product.Price
+	}
+	fmt.Println("data after:", data)
 	return data, err
 }
 

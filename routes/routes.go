@@ -33,6 +33,7 @@ func New(presenter factory.Presenter) *echo.Echo {
 	e.DELETE("/products/:id", presenter.ProductPresenter.DeleteById, _middleware.JWTMiddleware())
 
 	e.POST("/cart", presenter.CartPresenter.PostCart, _middleware.JWTMiddleware())
+	e.GET("/cart", presenter.CartPresenter.GetAll, _middleware.JWTMiddleware())
 
 	return e
 
