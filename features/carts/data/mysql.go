@@ -2,7 +2,6 @@ package data
 
 import (
 	"errors"
-	"fmt"
 	_cart "project/group2/features/carts"
 
 	"gorm.io/gorm"
@@ -29,13 +28,33 @@ func (repo *mysqlCartRepository) SelectData(limit, offset, idFromToken int) (dat
 
 func (repo *mysqlCartRepository) InsertData(data _cart.Core) (row int, err error) {
 	cart := FromCore(data)
-	fmt.Println()
 	result := repo.DB.Create(&cart)
 	if result.Error != nil {
 		return 0, result.Error
 	}
 	if result.RowsAffected != 1 {
 		return 0, errors.New("failed to create data cart")
+	}
+	return int(result.RowsAffected), nil
+}
+
+func (repo *mysqlCartRepository) UpdateDataDB(qty, idCart, idFromToken int) (row int, err error) {
+	dataCart := Cart{}
+	idCheck := repo.DB.First(&dataCart, idCart)
+
+	if idCheck.Error != nil {
+		return 0, idCheck.Error
+	}
+	if dataCart.UserID != idFromToken {
+		return -1, errors.New("you don't have access")
+	}
+	result := repo.DB.Model(&Cart{}).Where("id = ?", idCart).Update("qty", qty)
+
+	if result.Error != nil {
+		return 0, result.Error
+	}
+	if result.RowsAffected != 1 {
+		return 0, errors.New("failed to update data")
 	}
 	return int(result.RowsAffected), nil
 }

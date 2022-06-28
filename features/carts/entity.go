@@ -34,9 +34,11 @@ type User struct {
 type Business interface {
 	GetAllData(limit, offset, idFromToken int) (data []Core, err error)
 	CreateData(data Core) (row int, err error)
+	UpdateData(qty, idCart, idFromToken int) (row int, err error)
 }
 
 type Data interface {
 	SelectData(limit, offset, idFromToken int) (data []Core, err error)
 	InsertData(data Core) (row int, err error)
+	UpdateDataDB(qty, idCart, idFromToken int) (row int, err error)
 }
