@@ -35,3 +35,8 @@ func (uc *cartUseCase) UpdateData(qty, idCart, idFromToken int) (row int, err er
 	row, err = uc.cartData.UpdateDataDB(qty, idCart, idFromToken)
 	return row, err
 }
+
+func (uc *cartUseCase) DeleteData(idCart, idFromToken int) (row int, err error) {
+	row, err = uc.cartData.DeleteDataDB(idCart, idFromToken)
+	return row, err
+}

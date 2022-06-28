@@ -58,3 +58,22 @@ func (repo *mysqlCartRepository) UpdateDataDB(qty, idCart, idFromToken int) (row
 	}
 	return int(result.RowsAffected), nil
 }
+
+func (repo *mysqlCartRepository) DeleteDataDB(idCart, idFromToken int) (row int, err error) {
+	dataCart := Cart{}
+	idCheck := repo.DB.First(&dataCart, idCart)
+	if idCheck.Error != nil {
+		return 0, idCheck.Error
+	}
+	if idFromToken != dataCart.UserID {
+		return -1, errors.New("you don't have access")
+	}
+	result := repo.DB.Delete(&Cart{}, idCart)
+	if result.Error != nil {
+		return 0, result.Error
+	}
+	if result.RowsAffected != 1 {
+		return 0, errors.New("failed to delete data")
+	}
+	return int(result.RowsAffected), nil
+}
