@@ -1,5 +1,6 @@
 package request
 
 type Cart struct {
-	Qty int `json:"qty" form:"qty"`
+	IdProduct int `json:"product_id" form:"product_id"`
+	Qty       int `json:"qty" form:"qty"`
 }
