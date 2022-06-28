@@ -2,10 +2,9 @@ openapi: "3.0.2"
 info:
   title: E-Comerces SCARPA
   description: Open API scarpa
-  version: "1.0"
+  version: 1.0.0
 servers:
-  - url: 3.83.173.201:80
-
+  - url: http://3.83.173.201:80
 tags:
   - name: Autentication
   - name: Users
@@ -14,6 +13,7 @@ tags:
   - name: Order
 
 paths:
+  #autentication
   /login:
     post:
       tags:
@@ -25,7 +25,7 @@ paths:
             schema:
               $ref: "#"
             example:
-              name: altera@gmail.com
+              email: altera@gmail.com
               password: qwerty123
       responses:
         "200":
@@ -63,7 +63,7 @@ paths:
                       status: "failed",
                       message: "email or password incorrect",
                     }
-
+  #users
   /users:
     post:
       tags:
@@ -113,6 +113,8 @@ paths:
     get:
       tags:
         - Users
+      security:
+        - JWTAuth: []
       parameters:
         - name: iduser
           description: get data by id
@@ -155,6 +157,8 @@ paths:
     put:
       tags:
         - Users
+      security:
+        - JWTAuth: []
       requestBody:
         content:
           application/json:
@@ -198,6 +202,8 @@ paths:
     delete:
       tags:
         - Users
+      security:
+        - JWTAuth: []
       parameters:
         - name: iduser
           in: query
@@ -229,7 +235,7 @@ paths:
                 responseData1:
                   description: response failed 1
                   value: { code: 400, status: "failed", message: "Bad Request" }
-
+  #product
   /products:
     post:
       tags:
@@ -274,6 +280,95 @@ paths:
                   description: response failed 1
                   value: { code: 400, status: "failed", message: "Bad request" }
 
+    get:
+      tags:
+        - Product
+      parameters:
+        - in: query
+          name: offset
+          schema:
+            type: integer
+          description: The number of items to skip before starting to collect the result set
+        - in: query
+          name: limit
+          schema:
+            type: integer
+          description: The numbers of items to return
+      responses:
+        "200":
+          description: Success Response
+          content:
+            application/json:
+              schema:
+                $ref: "#"
+              examples:
+                response data:
+                  description: response success 1
+                  value:
+                    {
+                      id: 5,
+                      name: adidas1,
+                      price: 500000,
+                      qty: 1,
+                      description: ini sepetu runing adidas1,
+                    }
+        "400":
+          description: Failed Response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/failedResponse"
+              examples:
+                responseData1:
+                  description: response failed 1
+                  value: { code: 400, status: "failed", message: "Bad request" }
+
+  /prodicts/{id}:
+    get:
+      tags:
+        - Product
+      security:
+        - JWTAuth: []
+      parameters:
+        - name: idproduct
+          description: get data by id
+          in: path
+          schema:
+            type: integer
+            example: 1
+          required: true
+      responses:
+        "403":
+          description: forbiden
+        "404":
+          description: No data
+        "200":
+          description: Success Response
+          content:
+            application/json:
+              schema:
+                $ref: "#"
+              examples:
+                response data:
+                  description: response success 1
+                  value:
+                    {
+                      id: 5,
+                      name: adidas1,
+                      price: 500000,
+                      qty: 1,
+                      description: ini sepetu runing adidas1,
+                    }
+        "400":
+          description: Failed Response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/failedResponse"
+              examples:
+                responseData1:
+                  description: response failed 1
+                  value: { code: 400, status: "failed", message: "bad request" }
   /cart:
     post:
       tags:
@@ -356,6 +451,11 @@ paths:
                   value: { code: 400, status: "failed", message: "Bad request" }
 
 components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
   schemas:
     requestLogin:
       type: object
