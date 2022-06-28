@@ -3,15 +3,16 @@ package cart
 import "time"
 
 type Core struct {
-	ID        int
-	Qty       int
-	Status    string
-	UserID    int
-	ProdID    int
-	CreatedAt time.Time
-	UpdatedAt time.Time
-	Product   Product
-	User      User
+	ID         int
+	Qty        int
+	Status     string
+	TotalPrice int
+	UserID     int
+	ProductID  int
+	CreatedAt  time.Time
+	UpdatedAt  time.Time
+	Product    Product
+	User       User
 }
 
 type Product struct {

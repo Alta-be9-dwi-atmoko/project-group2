@@ -20,9 +20,10 @@ type Product struct {
 
 func FromCore(data _cart.Core) Cart {
 	return Cart{
-		ID:     data.ID,
-		Qty:    data.Qty,
-		UserID: data.UserID,
+		ID:         data.ID,
+		Qty:        data.Qty,
+		TotalPrice: data.TotalPrice,
+		UserID:     data.UserID,
 		Product: Product{
 			ID:          data.Product.ID,
 			Name:        data.Product.Name,

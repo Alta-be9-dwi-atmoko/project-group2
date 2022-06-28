@@ -40,7 +40,7 @@ func (repo *mysqlProductRepository) InsertData(input products.Core) (row int, er
 
 func (repo *mysqlProductRepository) SelectDataById(idProd int) (data products.Core, err error) {
 	dataProduct := Product{}
-	result := repo.DB.Find(&dataProduct, idProd)
+	result := repo.DB.Preload("User").Find(&dataProduct, idProd)
 	if result.Error != nil {
 		return products.Core{}, result.Error
 	}

@@ -2,6 +2,7 @@ package data
 
 import (
 	"errors"
+	"fmt"
 	_cart "project/group2/features/carts"
 
 	"gorm.io/gorm"
@@ -19,7 +20,7 @@ func NewCartRepository(db *gorm.DB) _cart.Data {
 
 func (repo *mysqlCartRepository) SelectData(limit, offset, idFromToken int) (data []_cart.Core, err error) {
 	dataCart := []Cart{}
-	result := repo.DB.Find(&dataCart).Where("user_id=?", idFromToken)
+	result := repo.DB.Preload("Product").Find(&dataCart).Where("user_id=?", idFromToken)
 	if result.Error != nil {
 		return []_cart.Core{}, result.Error
 	}
@@ -28,6 +29,7 @@ func (repo *mysqlCartRepository) SelectData(limit, offset, idFromToken int) (dat
 
 func (repo *mysqlCartRepository) InsertData(data _cart.Core) (row int, err error) {
 	cart := FromCore(data)
+	fmt.Println()
 	result := repo.DB.Create(&cart)
 	if result.Error != nil {
 		return 0, result.Error
