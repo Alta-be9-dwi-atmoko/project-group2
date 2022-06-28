@@ -9,6 +9,7 @@ type Core struct {
 	Qty         int
 	Image       string
 	Description string
+	UserID      int
 	CreatedAt   time.Time
 	UpdatedAt   time.Time
 	User        User

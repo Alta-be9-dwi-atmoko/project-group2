@@ -2,7 +2,6 @@ package data
 
 import (
 	"errors"
-	"fmt"
 	"project/group2/features/products"
 
 	"gorm.io/gorm"
@@ -24,8 +23,6 @@ func (repo *mysqlProductRepository) SelectData(limit, offset int) (response []pr
 	if result.Error != nil {
 		return []products.Core{}, result.Error
 	}
-	fmt.Println("dataProductbefore: ", dataProduct)
-	fmt.Println("dataProductafter: ", toCoreList(dataProduct))
 	return toCoreList(dataProduct), nil
 }
 
@@ -73,7 +70,7 @@ func (repo *mysqlProductRepository) UpdateDataDB(data map[string]interface{}, id
 
 func (repo *mysqlProductRepository) GetDataByMeDB(idUser int) (data []products.Core, err error) {
 	dataProduct := []Product{}
-	result := repo.DB.Find(&dataProduct).Where("userid = ?", idUser)
+	result := repo.DB.Preload("User").Find(&dataProduct).Where("userid = ?", idUser)
 	if result.Error != nil {
 		return []products.Core{}, result.Error
 	}
@@ -87,16 +84,16 @@ func (repo *mysqlProductRepository) DeleteDataByIdDB(idProd, idFromToken int) (r
 		return 0, idCheck.Error
 
 	}
-	fmt.Println("idUser: ", dataProduct.UserID)
-	fmt.Println("idFromToken: ", idFromToken)
 	if idFromToken != int(dataProduct.UserID) {
 		return -1, errors.New("you don't have access")
 	}
 
-	result := repo.DB.Delete(&User{}, idProd)
+	result := repo.DB.Delete(&Product{}, idProd)
 	if result.Error != nil {
 		return 0, result.Error
+
 	}
+
 	if result.RowsAffected != 1 {
 		return 0, errors.New("failed to delete data")
 	}

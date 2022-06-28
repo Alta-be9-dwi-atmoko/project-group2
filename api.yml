@@ -5,7 +5,6 @@ info:
   version: 1.0.0
 servers:
   - url: http://3.83.173.201:80
-
 tags:
   - name: Autentication
   - name: Users

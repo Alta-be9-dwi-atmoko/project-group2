@@ -1,7 +1,6 @@
 package presentation
 
 import (
-	"fmt"
 	"net/http"
 	_middleware "project/group2/features/middlewares"
 	"project/group2/features/products"
@@ -91,7 +90,6 @@ func (h *ProductHandler) PutProduct(c echo.Context) error {
 
 func (h *ProductHandler) GetByMe(c echo.Context) error {
 	idFromToken, _ := _middleware.ExtractToken(c)
-	fmt.Println("idFromToken: ", idFromToken)
 	result, err := h.productBusiness.GetDataByMe(idFromToken)
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, _helper.ResponseFailed("failed to get your product data"))
