@@ -25,16 +25,16 @@ func (mock mockUserData) LoginUserDB(authData users.AuthRequestData) (token, nam
 	return
 }
 
-func (mock mockUserData) SelectDataById(id int) (data Core, err error) {
-
+func (mock mockUserData) SelectDataById(id int) (data users.Core, err error) {
+	return
 }
 
 func (mock mockUserData) UpdateDataDB(data map[string]interface{}, idUser int) (row int, err error) {
-
+	return
 }
 
 func (mock mockUserData) DeleteDataByIdDB(idUser int) (row int, err error) {
-
+	return
 }
 
 //mock data faild
@@ -45,23 +45,23 @@ func (mock mockUserDataFailed) SelectData(param string) (data []users.Core, err 
 }
 
 func (mock mockUserDataFailed) InsertData(data users.Core) (row int, err error) {
-	return 0, fmt.Errorf("failed to insert data")
+	return 1, fmt.Errorf("failed to insert data")
 }
 
-func (mock mockUserDataFailed) LoginUserDB(authData AuthRequestData) (token, name string, err error) {
-
+func (mock mockUserDataFailed) LoginUserDB(authData users.AuthRequestData) (token, name string, err error) {
+	return
 }
 
-func (mock mockUserDataFailed) SelectDataById(id int) (data Core, err error) {
-
+func (mock mockUserDataFailed) SelectDataById(id int) (data users.Core, err error) {
+	return
 }
 
 func (mock mockUserDataFailed) UpdateDataDB(data map[string]interface{}, idUser int) (row int, err error) {
-
+	return
 }
 
 func (mock mockUserDataFailed) DeleteDataByIdDB(idUser int) (row int, err error) {
-
+	return
 }
 
 func TestGetAllData(t *testing.T) {
@@ -109,6 +109,26 @@ func TestCreateData(t *testing.T) {
 		userBusiness := NewUserBusiness(mockUserDataFailed{})
 		newUser := users.Core{
 			Name:     "alta",
+			Password: "qwerty",
+		}
+		result, err := userBusiness.CreateData(newUser)
+		assert.NotNil(t, err)
+		assert.Equal(t, -1, result)
+	})
+	t.Run("Test Insert data failed when  password emty", func(t *testing.T) {
+		userBusiness := NewUserBusiness(mockUserDataFailed{})
+		newUser := users.Core{
+			Name:  "alta",
+			Email: "alta@gmail.com",
+		}
+		result, err := userBusiness.CreateData(newUser)
+		assert.NotNil(t, err)
+		assert.Equal(t, -1, result)
+	})
+	t.Run("Test Insert data failed when  password emty", func(t *testing.T) {
+		userBusiness := NewUserBusiness(mockUserDataFailed{})
+		newUser := users.Core{
+			Email:    "alta@gmail.com",
 			Password: "qwerty",
 		}
 		result, err := userBusiness.CreateData(newUser)
