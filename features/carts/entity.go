@@ -43,4 +43,5 @@ type Data interface {
 	InsertData(data Core) (row int, err error)
 	UpdateDataDB(qty, idCart, idFromToken int) (row int, err error)
 	DeleteDataDB(idProd, idFromToken int) (row int, err error)
+	CheckCart(idProd, idFromToken int) (isExist bool, idCart, qty int, err error)
 }

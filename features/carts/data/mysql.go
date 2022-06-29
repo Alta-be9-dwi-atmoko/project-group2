@@ -19,11 +19,20 @@ func NewCartRepository(db *gorm.DB) _cart.Data {
 
 func (repo *mysqlCartRepository) SelectData(limit, offset, idFromToken int) (data []_cart.Core, err error) {
 	dataCart := []Cart{}
-	result := repo.DB.Preload("Product").Find(&dataCart).Where("user_id=?", idFromToken)
+	result := repo.DB.Preload("Product").Where("user_id=? AND status = ?", idFromToken, "Pending").Find(&dataCart)
 	if result.Error != nil {
 		return []_cart.Core{}, result.Error
 	}
 	return toCoreList(dataCart), nil
+}
+
+func (repo *mysqlCartRepository) CheckCart(idProd, idFromToken int) (isExist bool, idCart, qty int, err error) {
+	dataCart := Cart{}
+	resultCheck := repo.DB.Model(&Cart{}).Where("product_id = ? AND user_id = ? AND status = ?", idProd, idFromToken, "Pending").First(&dataCart)
+	if resultCheck.Error != nil {
+		return false, 0, 0, resultCheck.Error
+	}
+	return true, int(dataCart.ID), int(dataCart.Qty), nil
 }
 
 func (repo *mysqlCartRepository) InsertData(data _cart.Core) (row int, err error) {

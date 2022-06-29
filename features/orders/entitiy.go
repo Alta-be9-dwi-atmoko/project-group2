@@ -10,6 +10,7 @@ type Core struct {
 	UserID    int
 	AddressID int
 	Price     int
+	Status    string
 	Address   AddressCore
 	Payment   PaymentCore
 	CreatedAt time.Time
@@ -38,15 +39,15 @@ type PaymentCore struct {
 	PaymentCode string
 }
 
-type Bussiness interface {
-	// AddOrder(core Core,orderdetailid []int)(error)
+type Business interface {
+	CreateData(data Core, idCart []int) (row int, err error)
 	// GetOrder(orderId int)(orderData []Core ,err error)
 }
 
 type Data interface {
-	// InsertOrder(core Core ,payID int ,addID int)(orderID int, err error)
-	// InsertAddress(AddressCore)(addID int,err error)
-	// InsertPayment(PaymentCore)(payID int,err error)
+	InsertOrder(data Core) (orderID int, err error)
+	InsertAddress(AddressCore) (addID int, err error)
+	InsertPayment(PaymentCore) (payID int, err error)
 	// InsertOrderDetail(int,[]OrderDetail)(error)
 	// SelectOrder(int)([]Core ,error)
 	// SelectChart([]int)([]OrderDetail,error)

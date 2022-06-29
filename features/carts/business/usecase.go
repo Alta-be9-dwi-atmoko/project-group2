@@ -27,7 +27,13 @@ func (uc *cartUseCase) CreateData(data _cart.Core) (row int, err error) {
 	if data.Qty == 0 || data.Product.ID == 0 {
 		return -1, errors.New("please make sure all fields are filled in correctly")
 	}
-	row, err = uc.cartData.InsertData(data)
+	isExist, idCart, qty, _ := uc.cartData.CheckCart(data.Product.ID, data.UserID)
+	if isExist {
+		row, err = uc.cartData.UpdateDataDB(qty+1, idCart, data.UserID)
+	} else {
+		row, err = uc.cartData.InsertData(data)
+	}
+
 	return row, err
 }
 

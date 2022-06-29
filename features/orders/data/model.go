@@ -14,6 +14,7 @@ type Order struct {
 	UserID    int
 	Price     int
 	AddressID int
+	Status    string
 	Address   Address
 	Payment   Payment
 }
@@ -105,6 +106,7 @@ func fromCore(core orders.Core) Order {
 		AddressID: core.AddressID,
 		Price:     core.Price,
 		UserID:    core.UserID,
+		Status:    core.Status,
 	}
 }
 
