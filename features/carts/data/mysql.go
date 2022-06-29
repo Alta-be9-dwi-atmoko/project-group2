@@ -19,7 +19,7 @@ func NewCartRepository(db *gorm.DB) _cart.Data {
 
 func (repo *mysqlCartRepository) SelectData(limit, offset, idFromToken int) (data []_cart.Core, err error) {
 	dataCart := []Cart{}
-	result := repo.DB.Find(&dataCart).Where("user_id=?", idFromToken)
+	result := repo.DB.Preload("Product").Find(&dataCart).Where("user_id=?", idFromToken)
 	if result.Error != nil {
 		return []_cart.Core{}, result.Error
 	}
@@ -34,6 +34,46 @@ func (repo *mysqlCartRepository) InsertData(data _cart.Core) (row int, err error
 	}
 	if result.RowsAffected != 1 {
 		return 0, errors.New("failed to create data cart")
+	}
+	return int(result.RowsAffected), nil
+}
+
+func (repo *mysqlCartRepository) UpdateDataDB(qty, idCart, idFromToken int) (row int, err error) {
+	dataCart := Cart{}
+	idCheck := repo.DB.First(&dataCart, idCart)
+
+	if idCheck.Error != nil {
+		return 0, idCheck.Error
+	}
+	if dataCart.UserID != idFromToken {
+		return -1, errors.New("you don't have access")
+	}
+	result := repo.DB.Model(&Cart{}).Where("id = ?", idCart).Update("qty", qty)
+
+	if result.Error != nil {
+		return 0, result.Error
+	}
+	if result.RowsAffected != 1 {
+		return 0, errors.New("failed to update data")
+	}
+	return int(result.RowsAffected), nil
+}
+
+func (repo *mysqlCartRepository) DeleteDataDB(idCart, idFromToken int) (row int, err error) {
+	dataCart := Cart{}
+	idCheck := repo.DB.First(&dataCart, idCart)
+	if idCheck.Error != nil {
+		return 0, idCheck.Error
+	}
+	if idFromToken != dataCart.UserID {
+		return -1, errors.New("you don't have access")
+	}
+	result := repo.DB.Delete(&Cart{}, idCart)
+	if result.Error != nil {
+		return 0, result.Error
+	}
+	if result.RowsAffected != 1 {
+		return 0, errors.New("failed to delete data")
 	}
 	return int(result.RowsAffected), nil
 }

@@ -37,7 +37,7 @@ func (mock mockUserData) DeleteDataByIdDB(idUser int) (row int, err error) {
 	return
 }
 
-//mock data faild
+// //mock data faild
 type mockUserDataFailed struct{}
 
 func (mock mockUserDataFailed) SelectData(param string) (data []users.Core, err error) {
