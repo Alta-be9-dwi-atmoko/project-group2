@@ -85,3 +85,13 @@ func (h *OrderHandler) History(c echo.Context) error {
 	}
 	return c.JSON(http.StatusOK, _helper.ResponseOkWithData("success", _responseOrder.FromCoreList(result)))
 }
+
+func (h *OrderHandler) OrderDetail(c echo.Context) error {
+	id := c.Param("id")
+	idOrder, _ := strconv.Atoi(id)
+	result, err := h.orderBusiness.OrderDetails(idOrder)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, _helper.ResponseFailed("failed to get all data"))
+	}
+	return c.JSON(http.StatusOK, _helper.ResponseOkWithData("success", _responseOrder.OdFromCoreList(result)))
+}

@@ -41,6 +41,7 @@ func New(presenter factory.Presenter) *echo.Echo {
 	e.PUT("/orders/:id/confirm", presenter.OrderPresenter.Confirmed, _middleware.JWTMiddleware())
 	e.PUT("/orders/:id/cancel", presenter.OrderPresenter.Cancelled, _middleware.JWTMiddleware())
 	e.GET("/orders/history", presenter.OrderPresenter.History, _middleware.JWTMiddleware())
+	e.GET("/orderdetail/:id", presenter.OrderPresenter.OrderDetail)
 	return e
 
 }

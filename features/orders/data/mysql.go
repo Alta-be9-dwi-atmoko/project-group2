@@ -136,9 +136,18 @@ func (repo *mysqlOrderRepository) CancelStatusData(orderID, idFromToken int) (ro
 
 func (repo *mysqlOrderRepository) HistoryAllData(limitint, offsetint, idFromToken int) (data []orders.Core, err error) {
 	dataOrder := []Order{}
-	result := repo.DB.Preload("OrderDetail").Preload("Address").Preload("Payment").Where("user_id = ? AND status = ? OR status = ?", idFromToken, "Confirmed", "Cancelled").Find(&dataOrder)
+	result := repo.DB.Limit(limitint).Offset(offsetint).Preload("OrderDetail").Preload("Address").Preload("Payment").Where("user_id = ? AND status = ? OR status = ?", idFromToken, "Confirmed", "Cancelled").Find(&dataOrder)
 	if result.Error != nil {
 		return []orders.Core{}, result.Error
 	}
 	return ToCoreList(dataOrder), nil
+}
+
+func (repo *mysqlOrderRepository) OrderDetailDB(orderID int) (data []orders.OrderDetail, err error) {
+	dataOrderdetail := []OrderDetail{}
+	result := repo.DB.Where("order_id = ?", orderID).Find(&dataOrderdetail)
+	if result.Error != nil {
+		return []orders.OrderDetail{}, result.Error
+	}
+	return ToOrderDetailCoreList(dataOrderdetail), nil
 }

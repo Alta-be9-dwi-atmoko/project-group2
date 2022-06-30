@@ -46,6 +46,7 @@ type Business interface {
 	ConfirmStatus(idOrder, idFromToken int) (row int, err error)
 	CancelStatus(orderID, idFromToken int) (row int, err error)
 	HistoryAll(limitint, offsetint, idFromToken int) (data []Core, err error)
+	OrderDetails(orderID int) (data []OrderDetail, err error)
 }
 
 type Data interface {
@@ -58,4 +59,5 @@ type Data interface {
 	ConfirmStatusData(idOrder, idFromToken int) (row int, err error)
 	CancelStatusData(orderID, idFromToken int) (row int, err error)
 	HistoryAllData(limitint, offsetint, idFromToken int) (data []Core, err error)
+	OrderDetailDB(orderID int) (data []OrderDetail, err error)
 }
