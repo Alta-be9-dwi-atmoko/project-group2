@@ -42,6 +42,7 @@ type PaymentCore struct {
 type Business interface {
 	CreateData(data Core, idCart []int) (row int, err error)
 	ConfirmStatus(idOrder, idFromToken int) (row int, err error)
+	CancelStatus(orderID, idFromToken int) (row int, err error)
 }
 
 type Data interface {
@@ -52,6 +53,6 @@ type Data interface {
 	SelectCart(idCart []int, userID int) (item []OrderDetail, err error)
 	InsertOrderDetail(data OrderDetail, orderID int) (row int, err error)
 	ConfirmStatusData(idOrder, idFromToken int) (row int, err error)
-	// SelectChart([]int)([]OrderDetail,error)
+	CancelStatusData(orderID, idFromToken int) (row int, err error)
 	// SelectOrderDetailByOrderID(orderID int)([]OrderDetail, error)
 }
