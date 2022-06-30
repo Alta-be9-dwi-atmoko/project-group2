@@ -22,3 +22,21 @@ Go to the project directory
 ```bash
   cd project-group2
 ```
+
+## Open Api
+
+if you want to consume our api
+here's the way !
+
+```bash
+https://app.swaggerhub.com/apis-docs/darmon17/project2-scarpa/1.0.0
+```
+
+## Docker Image
+
+you may want to run our docker image on your container too
+why not !
+
+```bash 
+https://hub.docker.com/repository/docker/dwiatmoko/group2-api
+```
