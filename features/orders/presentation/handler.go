@@ -7,6 +7,7 @@ import (
 	_order "project/group2/features/orders"
 	_requestOrder "project/group2/features/orders/presentation/request"
 	_helper "project/group2/helper"
+	"strconv"
 
 	"github.com/labstack/echo/v4"
 )
@@ -40,5 +41,19 @@ func (h *OrderHandler) PostOrder(c echo.Context) error {
 		return c.JSON(http.StatusInternalServerError, _helper.ResponseFailed("failed to create product, check your input"))
 	}
 
+	return c.JSON(http.StatusOK, _helper.ResponseOkNoData("success"))
+}
+
+func (h *OrderHandler) Confirmed(c echo.Context) error {
+	id := c.Param("id")
+	idOrder, _ := strconv.Atoi(id)
+	idFromToken, _ := _middleware.ExtractToken(c)
+	row, errCon := h.orderBusiness.ConfirmStatus(idOrder, idFromToken)
+	if errCon != nil {
+		return c.JSON(http.StatusInternalServerError, _helper.ResponseFailed("you dont have access"))
+	}
+	if row == 0 {
+		return c.JSON(http.StatusBadRequest, _helper.ResponseFailed("failed to update data"))
+	}
 	return c.JSON(http.StatusOK, _helper.ResponseOkNoData("success"))
 }

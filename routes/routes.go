@@ -38,6 +38,7 @@ func New(presenter factory.Presenter) *echo.Echo {
 	e.DELETE("/carts/:id", presenter.CartPresenter.DeleteCart, _middleware.JWTMiddleware())
 
 	e.POST("/orders", presenter.OrderPresenter.PostOrder, _middleware.JWTMiddleware())
+	e.PUT("/orders/:id/confirm", presenter.OrderPresenter.Confirmed, _middleware.JWTMiddleware())
 	return e
 
 }
