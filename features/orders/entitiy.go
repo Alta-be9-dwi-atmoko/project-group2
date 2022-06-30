@@ -63,3 +63,5 @@ type Data interface {
 	OrderDetailDB(orderID int) (data []OrderDetail, err error)
 	GetMyDataOrderDB(limitint, offsetint, idFromToken int) (data []Core, err error)
 }
+
+//
