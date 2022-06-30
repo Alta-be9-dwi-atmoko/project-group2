@@ -46,3 +46,29 @@ func FromCoreList(data []orders.Core) []Order {
 	}
 	return result
 }
+
+type OrderDetail struct {
+	ID          int    `json:"id"`
+	OrderID     int    `json:"order_id"`
+	ProductName string `json:"product_name"`
+	Price       int    `json:"price"`
+	Qty         int    `json:"qty"`
+}
+
+func OdFromCore(data orders.OrderDetail) OrderDetail {
+	return OrderDetail{
+		ID:          data.ID,
+		OrderID:     data.OrderID,
+		ProductName: data.ProductName,
+		Price:       data.Price,
+		Qty:         data.Qty,
+	}
+}
+
+func OdFromCoreList(data []orders.OrderDetail) []OrderDetail {
+	result := []OrderDetail{}
+	for key := range data {
+		result = append(result, OdFromCore(data[key]))
+	}
+	return result
+}

@@ -70,3 +70,8 @@ func (uc *orderUseCase) HistoryAll(limitint, offsetint, idFromToken int) (data [
 	data, err = uc.orderData.HistoryAllData(limitint, offsetint, idFromToken)
 	return data, err
 }
+
+func (uc *orderUseCase) OrderDetails(orderID int) (data []orders.OrderDetail, err error) {
+	data, err = uc.orderData.OrderDetailDB(orderID)
+	return data, err
+}

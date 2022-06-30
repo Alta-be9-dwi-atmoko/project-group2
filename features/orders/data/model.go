@@ -80,21 +80,22 @@ func ToCoreList(data []Order) []orders.Core {
 	return result
 }
 
-// func (dataOrderDetail) toOrderDetailCore() orders.OrderDetail {
-// 	return orders.OrderDetail{
-// 		ID:      int(data.ID),
-// 		OrderID: data.OrderID,
-// 		Price:   data.Price,
-// 		Qty:     data.Qty,
-// 	}
-// }
-// func ToOrderDetailCoreList(data []OrderDetail) []orders.OrderDetail {
-// 	result := []orders.OrderDetail{}
-// 	for key := range data {
-// 		result = append(result, data[key].toOrderDetailCore())
-// 	}
-// 	return result
-// }
+func toOrderDetailCore(data OrderDetail) orders.OrderDetail {
+	return orders.OrderDetail{
+		ID:          int(data.ID),
+		OrderID:     data.OrderID,
+		ProductName: data.ProductName,
+		Price:       data.Price,
+		Qty:         data.Qty,
+	}
+}
+func ToOrderDetailCoreList(data []OrderDetail) []orders.OrderDetail {
+	result := []orders.OrderDetail{}
+	for key := range data {
+		result = append(result, toOrderDetailCore(data[key]))
+	}
+	return result
+}
 
 func (data *Cart) toOrderDetailFromCart() orders.OrderDetail {
 	return orders.OrderDetail{
