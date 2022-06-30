@@ -10,21 +10,21 @@ import (
 
 type Order struct {
 	gorm.Model
-	PaymentID int
-	UserID    int
-	Price     int
-	AddressID int
-	Status    string
-	Address   Address
-	Payment   Payment
+	PaymentID  int
+	UserID     int
+	TotalPrice int
+	AddressID  int
+	Status     string
+	Address    Address
+	Payment    Payment
 }
 
 type OrderDetail struct {
-	ID          int `gorm:"autoIncrement"`
-	OrderID     int
-	ProductName string
-	Price       int
-	Qty         int
+	ID        int `gorm:"autoIncrement"`
+	OrderID   int
+	ProductID int
+	Price     int
+	Qty       int
 }
 
 type Cart struct {
@@ -53,9 +53,9 @@ type Payment struct {
 
 func (data Order) toCore() orders.Core {
 	return orders.Core{
-		ID:     int(data.ID),
-		Price:  data.Price,
-		UserID: data.UserID,
+		ID:         int(data.ID),
+		TotalPrice: data.TotalPrice,
+		UserID:     data.UserID,
 	}
 }
 
@@ -85,10 +85,10 @@ func ToCoreList(data []Order) []orders.Core {
 
 func (data *Cart) toOrderDetailFromCart() orders.OrderDetail {
 	return orders.OrderDetail{
-		ID:          int(data.ID),
-		Qty:         data.Qty,
-		ProductName: data.Product.Name,
-		Price:       data.Product.Price,
+		ID:        int(data.ID),
+		Qty:       data.Qty,
+		ProductID: int(data.Product.ID),
+		Price:     data.Product.Price,
 	}
 }
 
@@ -102,22 +102,22 @@ func ToOrderDetailCoreListFromCart(data []Cart) []orders.OrderDetail {
 
 func fromCore(core orders.Core) Order {
 	return Order{
-		PaymentID: core.PaymentID,
-		AddressID: core.AddressID,
-		Price:     core.Price,
-		UserID:    core.UserID,
-		Status:    core.Status,
+		PaymentID:  core.PaymentID,
+		AddressID:  core.AddressID,
+		TotalPrice: core.TotalPrice,
+		UserID:     core.UserID,
+		Status:     core.Status,
 	}
 }
 
-func fromOrderDetailCore(orderDetailCore orders.OrderDetail) OrderDetail {
-	return OrderDetail{
-		ProductName: orderDetailCore.ProductName,
-		Price:       orderDetailCore.Price,
-		OrderID:     orderDetailCore.OrderID,
-		Qty:         orderDetailCore.Qty,
-	}
-}
+// func fromOrderDetailCore(orderDetailCore orders.OrderDetail) OrderDetail {
+// 	return OrderDetail{
+// 		ProductID: int(orderDetailCore.ProductID),
+// 		Price:     orderDetailCore.Price,
+// 		OrderID:   orderDetailCore.OrderID,
+// 		Qty:       orderDetailCore.Qty,
+// 	}
+// }
 
 func fromOrderDetailCoreList(data []orders.OrderDetail) []OrderDetail {
 	result := []OrderDetail{}
@@ -143,5 +143,13 @@ func fromPaymentCore(paymentCore orders.PaymentCore) Payment {
 		CardNumber:  paymentCore.CardNumber,
 		PaymentCode: paymentCore.PaymentCode,
 		PaymentName: paymentCore.PaymentName,
+	}
+}
+
+func fromOrderDetailCore(orderDetail orders.OrderDetail) OrderDetail {
+	return OrderDetail{
+		ProductID: orderDetail.ProductID,
+		Price:     orderDetail.Price,
+		Qty:       orderDetail.Qty,
 	}
 }

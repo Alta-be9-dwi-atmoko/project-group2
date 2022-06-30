@@ -1,6 +1,7 @@
 package presentation
 
 import (
+	"fmt"
 	"net/http"
 	_middleware "project/group2/features/middlewares"
 	_order "project/group2/features/orders"
@@ -30,6 +31,7 @@ func (h *OrderHandler) PostOrder(c echo.Context) error {
 	dataOrder := _requestOrder.ToCore(orderReq)
 	dataOrder.UserID = idFromToken
 	row, errCreate := h.orderBusiness.CreateData(dataOrder, orderReq.CartID)
+	fmt.Println("row: ", row)
 	if row == -1 {
 		return c.JSON(http.StatusBadRequest, _helper.ResponseFailed("please make sure all fields are filled in correctly"))
 	}
