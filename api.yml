@@ -459,7 +459,7 @@ paths:
                 responseData1:
                   description: response failed 1
                   value: { code: 400, status: "failed", message: "Bad Request" }
-  /products/{me}:
+  /products/me:
     get:
       tags:
         - Product
@@ -498,10 +498,12 @@ paths:
                       User: { id: 6, name: alta },
                     }
 
-  /cart:
+  /carts:
     post:
       tags:
         - Cart
+      security:
+        - JWTAuth: []
       parameters: []
       requestBody:
         content:
@@ -541,6 +543,8 @@ paths:
     get:
       tags:
         - Cart
+      security:
+        - JWTAuth: []
       responses:
         "200":
           description: Success Response
@@ -576,6 +580,8 @@ paths:
                 responseData1:
                   description: response failed 1
                   value: { code: 400, status: "failed", message: "Bad request" }
+
+  /carts/{idcart}:
     put:
       tags:
         - Cart
@@ -589,8 +595,8 @@ paths:
             example:
               qty: 1
       parameters:
-        - name: iduser
-          in: query
+        - name: idcart
+          in: path
           schema:
             type: integer
             example: 1
@@ -666,10 +672,12 @@ paths:
                       message: "Bad Request, missing or malformed jwt",
                     }
 
-  /order:
+  /orders:
     post:
       tags:
         - Order
+      security:
+        - JWTAuth: []
       parameters: []
       requestBody:
         content:
@@ -677,8 +685,23 @@ paths:
             schema:
               $ref: "#"
             example:
-              cart_id: [2]
-              addres:
+                {
+              cart_id: [
+                 2, 3
+               ],
+              address: {
+                street: "Jalan Veteran No.10",
+                city: "Malang",
+                province: "Jawa Timur",
+                postal_code: "10101"
+                  },
+              payment: {
+                payment_name: "Visa",
+                card_number: "1000-1000-1000-1000",
+                payment_code: "1000"
+                  }
+                } 
+
       responses:
         "200":
           description: Success Response
@@ -708,6 +731,119 @@ paths:
     get:
       tags:
         - Order
+      security:
+        - JWTAuth: []
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#"
+            example:
+              cart_id: [2]
+              addres: "this is addres"
+      responses:
+        "200":
+          description: Success Response
+          content:
+            application/json:
+              schema:
+                $ref: "#"
+              examples:
+                response data:
+                  description: response success 1
+                  value:
+                    {
+                      code: 200,
+                      status: "success",
+                      message: "success operation create data",
+                    }
+        "400":
+          description: Failed Response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/failedResponse"
+              examples:
+                responseData1:
+                  description: response failed 1
+                  value: { code: 400, status: "failed", message: "Bad request" }
+  /orders/{idorder}/confirm:
+    put:
+      tags:
+        - Order
+      security:
+        - JWTAuth: []
+      responses:
+        "200":
+          description: Success Response
+          content:
+            application/json:
+              schema:
+                $ref: "#"
+              examples:
+                response data:
+                  value:
+                    code: 200
+                    status: "success"
+                    message: "Successful Operation"
+
+        "400":
+          description: Failed Response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/failedResponse"
+              examples:
+                responseData1:
+                  description: response failed 1
+                  value:
+                    {
+                      code: 400,
+                      status: "failed",
+                      message: "Bad Request, missing or malformed jwt",
+                    }
+  /orders/{idorder}/cancel:
+    put:
+      tags:
+        - Order
+      security:
+        - JWTAuth: []
+      responses:
+        "200":
+          description: Success Response
+          content:
+            application/json:
+              schema:
+                $ref: "#"
+              examples:
+                response data:
+                  value:
+                    code: 200
+                    status: "success"
+                    message: "Successful Operation"
+
+        "400":
+          description: Failed Response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/failedResponse"
+              examples:
+                responseData1:
+                  description: response failed 1
+                  value:
+                    {
+                      code: 400,
+                      status: "failed",
+                      message: "Bad Request, missing or malformed jwt",
+                    }
+  /orders/history:
+    get:
+      tags:
+        - Order
+      security:
+        - JWTAuth: []
       parameters: []
       requestBody:
         content:
@@ -743,6 +879,8 @@ paths:
                 responseData1:
                   description: response failed 1
                   value: { code: 400, status: "failed", message: "Bad request" }
+
+
 components:
   securitySchemes:
     bearerAuth:
