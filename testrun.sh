@@ -1,1 +1,1 @@
-go test .features/... -coverprofil=cover.out && go tool covel -html=cover.out
+go test ./features/... -coverprofil=cover.out && go tool covel -html=cover.out
