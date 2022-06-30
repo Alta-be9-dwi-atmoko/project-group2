@@ -24,7 +24,7 @@ type OrderDetail struct {
 	ID          int `gorm:"autoIncrement"`
 	OrderID     int
 	ProductID   int
-	ProductName string
+	ProductName string `gorm:"column:product_name"`
 	Price       int
 	Qty         int
 }
