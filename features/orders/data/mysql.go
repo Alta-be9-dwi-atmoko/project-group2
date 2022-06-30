@@ -151,3 +151,12 @@ func (repo *mysqlOrderRepository) OrderDetailDB(orderID int) (data []orders.Orde
 	}
 	return ToOrderDetailCoreList(dataOrderdetail), nil
 }
+
+func (repo *mysqlOrderRepository) GetMyDataOrderDB(limitint, offsetint, idFromToken int) (data []orders.Core, err error) {
+	dataOrder := []Order{}
+	result := repo.DB.Limit(limitint).Offset(offsetint).Preload("OrderDetail").Preload("Address").Preload("Payment").Where("user_id = ? ", idFromToken).Find(&dataOrder)
+	if result.Error != nil {
+		return []orders.Core{}, result.Error
+	}
+	return ToCoreList(dataOrder), nil
+}

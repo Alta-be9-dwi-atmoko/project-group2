@@ -47,6 +47,7 @@ type Business interface {
 	CancelStatus(orderID, idFromToken int) (row int, err error)
 	HistoryAll(limitint, offsetint, idFromToken int) (data []Core, err error)
 	OrderDetails(orderID int) (data []OrderDetail, err error)
+	GetMyDataOrder(limitint, offsetint, idFromToken int) (data []Core, err error)
 }
 
 type Data interface {
@@ -60,4 +61,5 @@ type Data interface {
 	CancelStatusData(orderID, idFromToken int) (row int, err error)
 	HistoryAllData(limitint, offsetint, idFromToken int) (data []Core, err error)
 	OrderDetailDB(orderID int) (data []OrderDetail, err error)
+	GetMyDataOrderDB(limitint, offsetint, idFromToken int) (data []Core, err error)
 }

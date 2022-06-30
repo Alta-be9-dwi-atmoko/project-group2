@@ -75,3 +75,8 @@ func (uc *orderUseCase) OrderDetails(orderID int) (data []orders.OrderDetail, er
 	data, err = uc.orderData.OrderDetailDB(orderID)
 	return data, err
 }
+
+func (uc *orderUseCase) GetMyDataOrder(limitint, offsetint, idFromToken int) (data []orders.Core, err error) {
+	data, err = uc.orderData.GetMyDataOrderDB(limitint, offsetint, idFromToken)
+	return data, err
+}

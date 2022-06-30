@@ -95,3 +95,16 @@ func (h *OrderHandler) OrderDetail(c echo.Context) error {
 	}
 	return c.JSON(http.StatusOK, _helper.ResponseOkWithData("success", _responseOrder.OdFromCoreList(result)))
 }
+
+func (h *OrderHandler) GetMyOrder(c echo.Context) error {
+	limit := c.QueryParam("limit")
+	offset := c.QueryParam("offset")
+	limitint, _ := strconv.Atoi(limit)
+	offsetint, _ := strconv.Atoi(offset)
+	idFromToken, _ := _middleware.ExtractToken(c)
+	result, err := h.orderBusiness.GetMyDataOrder(limitint, offsetint, idFromToken)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, _helper.ResponseFailed("failed to get all data"))
+	}
+	return c.JSON(http.StatusOK, _helper.ResponseOkWithData("success", _responseOrder.FromCoreList(result)))
+}
