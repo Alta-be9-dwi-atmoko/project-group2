@@ -39,6 +39,7 @@ func New(presenter factory.Presenter) *echo.Echo {
 
 	e.POST("/orders", presenter.OrderPresenter.PostOrder, _middleware.JWTMiddleware())
 	e.PUT("/orders/:id/confirm", presenter.OrderPresenter.Confirmed, _middleware.JWTMiddleware())
+	e.PUT("/orders/:id/cancel", presenter.OrderPresenter.Cancelled, _middleware.JWTMiddleware())
 	return e
 
 }

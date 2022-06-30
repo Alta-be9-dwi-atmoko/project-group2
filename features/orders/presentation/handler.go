@@ -57,3 +57,17 @@ func (h *OrderHandler) Confirmed(c echo.Context) error {
 	}
 	return c.JSON(http.StatusOK, _helper.ResponseOkNoData("success"))
 }
+
+func (h *OrderHandler) Cancelled(c echo.Context) error {
+	id := c.Param("id")
+	idOrder, _ := strconv.Atoi(id)
+	idFromToken, _ := _middleware.ExtractToken(c)
+	row, errCon := h.orderBusiness.CancelStatus(idOrder, idFromToken)
+	if errCon != nil {
+		return c.JSON(http.StatusInternalServerError, _helper.ResponseFailed("you dont have access"))
+	}
+	if row == 0 {
+		return c.JSON(http.StatusBadRequest, _helper.ResponseFailed("failed to update data"))
+	}
+	return c.JSON(http.StatusOK, _helper.ResponseOkNoData("success"))
+}

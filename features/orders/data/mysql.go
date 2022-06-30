@@ -113,3 +113,22 @@ func (repo *mysqlOrderRepository) ConfirmStatusData(orderID, idFromToken int) (r
 	}
 	return int(result.RowsAffected), nil
 }
+
+func (repo *mysqlOrderRepository) CancelStatusData(orderID, idFromToken int) (row int, err error) {
+	dataOrder := Order{}
+	idCheck := repo.DB.First(&dataOrder, orderID)
+	if idCheck.Error != nil {
+		return 0, idCheck.Error
+	}
+	if dataOrder.UserID != idFromToken {
+		return -1, errors.New("you don't have access")
+	}
+	result := repo.DB.Model(&Order{}).Where("id = ?", orderID).Update("status", "Cancelled")
+	if result.Error != nil {
+		return 0, result.Error
+	}
+	if result.RowsAffected != 1 {
+		return 0, errors.New("failed to update order status")
+	}
+	return int(result.RowsAffected), nil
+}

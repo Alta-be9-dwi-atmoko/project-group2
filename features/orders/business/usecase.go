@@ -60,3 +60,8 @@ func (uc *orderUseCase) ConfirmStatus(orderID, idFromToken int) (row int, err er
 	row, err = uc.orderData.ConfirmStatusData(orderID, idFromToken)
 	return row, err
 }
+
+func (uc *orderUseCase) CancelStatus(orderID, idFromToken int) (row int, err error) {
+	row, err = uc.orderData.CancelStatusData(orderID, idFromToken)
+	return row, err
+}
