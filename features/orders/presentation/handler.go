@@ -6,6 +6,7 @@ import (
 	_middleware "project/group2/features/middlewares"
 	_order "project/group2/features/orders"
 	_requestOrder "project/group2/features/orders/presentation/request"
+	_responseOrder "project/group2/features/orders/presentation/response"
 	_helper "project/group2/helper"
 	"strconv"
 
@@ -70,4 +71,17 @@ func (h *OrderHandler) Cancelled(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, _helper.ResponseFailed("failed to update data"))
 	}
 	return c.JSON(http.StatusOK, _helper.ResponseOkNoData("success"))
+}
+
+func (h *OrderHandler) History(c echo.Context) error {
+	limit := c.QueryParam("limit")
+	offset := c.QueryParam("offset")
+	limitint, _ := strconv.Atoi(limit)
+	offsetint, _ := strconv.Atoi(offset)
+	idFromToken, _ := _middleware.ExtractToken(c)
+	result, err := h.orderBusiness.HistoryAll(limitint, offsetint, idFromToken)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, _helper.ResponseFailed("failed to get all data"))
+	}
+	return c.JSON(http.StatusOK, _helper.ResponseOkWithData("success", _responseOrder.FromCoreList(result)))
 }
