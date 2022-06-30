@@ -65,3 +65,8 @@ func (uc *orderUseCase) CancelStatus(orderID, idFromToken int) (row int, err err
 	row, err = uc.orderData.CancelStatusData(orderID, idFromToken)
 	return row, err
 }
+
+func (uc *orderUseCase) HistoryAll(limitint, offsetint, idFromToken int) (data []orders.Core, err error) {
+	data, err = uc.orderData.HistoryAllData(limitint, offsetint, idFromToken)
+	return data, err
+}

@@ -72,9 +72,10 @@ func (repo *mysqlOrderRepository) SelectCart(idCart []int, userID int) (item []o
 	itemDetail := []orders.OrderDetail{}
 	for i := 0; i < len(resultCart); i++ {
 		itemDetail = append(itemDetail, orders.OrderDetail{
-			Price:     resultCart[i].Qty * resultCart[i].Product.Price,
-			ProductID: resultCart[i].ProductID,
-			Qty:       resultCart[i].Qty,
+			Price:       resultCart[i].Qty * resultCart[i].Product.Price,
+			ProductID:   resultCart[i].ProductID,
+			ProductName: resultCart[i].Product.Name,
+			Qty:         resultCart[i].Qty,
 		})
 
 	}
@@ -131,4 +132,13 @@ func (repo *mysqlOrderRepository) CancelStatusData(orderID, idFromToken int) (ro
 		return 0, errors.New("failed to update order status")
 	}
 	return int(result.RowsAffected), nil
+}
+
+func (repo *mysqlOrderRepository) HistoryAllData(limitint, offsetint, idFromToken int) (data []orders.Core, err error) {
+	dataOrder := []Order{}
+	result := repo.DB.Preload("OrderDetail").Preload("Address").Preload("Payment").Where("user_id = ? AND status = ? OR status = ?", idFromToken, "Confirmed", "Cancelled").Find(&dataOrder)
+	if result.Error != nil {
+		return []orders.Core{}, result.Error
+	}
+	return ToCoreList(dataOrder), nil
 }

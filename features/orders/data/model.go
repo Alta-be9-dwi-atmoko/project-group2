@@ -10,21 +10,23 @@ import (
 
 type Order struct {
 	gorm.Model
-	PaymentID  int
-	UserID     int
-	TotalPrice int
-	AddressID  int
-	Status     string
-	Address    Address
-	Payment    Payment
+	PaymentID   int
+	UserID      int
+	TotalPrice  int
+	AddressID   int
+	Status      string
+	Address     Address
+	Payment     Payment
+	OrderDetail []OrderDetail
 }
 
 type OrderDetail struct {
-	ID        int `gorm:"autoIncrement"`
-	OrderID   int
-	ProductID int
-	Price     int
-	Qty       int
+	ID          int `gorm:"autoIncrement"`
+	OrderID     int
+	ProductID   int
+	ProductName string
+	Price       int
+	Qty         int
 }
 
 type Cart struct {
@@ -56,6 +58,17 @@ func (data Order) toCore() orders.Core {
 		ID:         int(data.ID),
 		TotalPrice: data.TotalPrice,
 		UserID:     data.UserID,
+		Status:     data.Status,
+		Address: orders.AddressCore{
+			City:       data.Address.City,
+			Province:   data.Address.Province,
+			PostalCode: data.Address.PostalCode,
+			Street:     data.Address.Street,
+		},
+		Payment: orders.PaymentCore{
+			PaymentName: data.Payment.PaymentName,
+		},
+		CreatedAt: data.CreatedAt,
 	}
 }
 
@@ -148,8 +161,9 @@ func fromPaymentCore(paymentCore orders.PaymentCore) Payment {
 
 func fromOrderDetailCore(orderDetail orders.OrderDetail) OrderDetail {
 	return OrderDetail{
-		ProductID: orderDetail.ProductID,
-		Price:     orderDetail.Price,
-		Qty:       orderDetail.Qty,
+		ProductID:   orderDetail.ProductID,
+		ProductName: orderDetail.ProductName,
+		Price:       orderDetail.Price,
+		Qty:         orderDetail.Qty,
 	}
 }

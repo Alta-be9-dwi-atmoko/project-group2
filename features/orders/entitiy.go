@@ -5,23 +5,25 @@ import (
 )
 
 type Core struct {
-	ID         int
-	PaymentID  int
-	UserID     int
-	AddressID  int
-	TotalPrice int
-	Status     string
-	Address    AddressCore
-	Payment    PaymentCore
-	CreatedAt  time.Time
+	ID          int
+	PaymentID   int
+	UserID      int
+	AddressID   int
+	TotalPrice  int
+	Status      string
+	Address     AddressCore
+	Payment     PaymentCore
+	OrderDetail OrderDetail
+	CreatedAt   time.Time
 }
 
 type OrderDetail struct {
-	ID        int
-	OrderID   int
-	ProductID int
-	Price     int
-	Qty       int
+	ID          int
+	OrderID     int
+	ProductID   int
+	ProductName string
+	Price       int
+	Qty         int
 }
 
 type AddressCore struct {
@@ -43,6 +45,7 @@ type Business interface {
 	CreateData(data Core, idCart []int) (row int, err error)
 	ConfirmStatus(idOrder, idFromToken int) (row int, err error)
 	CancelStatus(orderID, idFromToken int) (row int, err error)
+	HistoryAll(limitint, offsetint, idFromToken int) (data []Core, err error)
 }
 
 type Data interface {
@@ -54,5 +57,5 @@ type Data interface {
 	InsertOrderDetail(data OrderDetail, orderID int) (row int, err error)
 	ConfirmStatusData(idOrder, idFromToken int) (row int, err error)
 	CancelStatusData(orderID, idFromToken int) (row int, err error)
-	// SelectOrderDetailByOrderID(orderID int)([]OrderDetail, error)
+	HistoryAllData(limitint, offsetint, idFromToken int) (data []Core, err error)
 }
