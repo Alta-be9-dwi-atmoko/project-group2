@@ -728,6 +728,8 @@ paths:
                 responseData1:
                   description: response failed 1
                   value: { code: 400, status: "failed", message: "Bad request" }
+
+  /orders/me:
     get:
       tags:
         - Order
@@ -740,8 +742,19 @@ paths:
             schema:
               $ref: "#"
             example:
-              cart_id: [2]
-              addres: "this is addres"
+              id: 4
+              user_id: 6
+              total_price: 1298000
+              status: "Pending"
+              product: {
+                  street: "Jalan Veteran No.10",
+                  city: "Malang",
+                  province: "Jawa Timur",
+                  postal_code: "10101"
+                      }
+              payment_name: "Visa"
+              created_at: "2022-07-01T00:23:28.209Z"
+              
       responses:
         "200":
           description: Success Response
@@ -851,8 +864,63 @@ paths:
             schema:
               $ref: "#"
             example:
-              cart_id: [2]
-              addres:
+              id: 2,
+              user_id: 1
+              total_price: 799000
+              status: "Cancelled"
+              product: {
+                  street: "Jalan Veteran No.10",
+                  city: "Malang",
+                  province: "Jawa Timur",
+                  postal_code: "10101",
+                       }
+              payment_name: "Visa"
+              created_at: "2022-06-30T11:32:06.257Z"
+               
+      responses:
+        "200":
+          description: Success Response
+          content:
+            application/json:
+              schema:
+                $ref: "#"
+              examples:
+                response data:
+                  description: response success 1
+                  value:
+                    {
+                      code: 200,
+                      status: "success",
+                      message: "success operation create data",
+                    }
+        "400":
+          description: Failed Response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/failedResponse"
+              examples:
+                responseData1:
+                  description: response failed 1
+                  value: { code: 400, status: "failed", message: "Bad request" }
+  /orderdetail/{idorder}:
+     get:
+      tags:
+        - Order
+      security:
+        - JWTAuth: []
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#"
+            example:
+              id: 5
+              order_id: 4
+              product_name: "Adidas"
+              price: 799000,
+              qty: 1
       responses:
         "200":
           description: Success Response
