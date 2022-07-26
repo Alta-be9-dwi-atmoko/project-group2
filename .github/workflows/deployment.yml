@@ -23,4 +23,4 @@ jobs:
             docker rm group2Container
             docker rmi group2-api
             docker build -t group2-api:latest .
-            docker run -d -p 80:80 --name group2Container group2-api:latest
+            docker run -d -p 8080:8080 --name group2Container group2-api:latest
